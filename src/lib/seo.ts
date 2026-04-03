@@ -7,6 +7,7 @@ type BuildPageMetadataOptions = {
   description: string;
   path: string;
   imagePath?: string;
+  keywords?: string[];
   noIndex?: boolean;
 };
 
@@ -15,6 +16,7 @@ export function buildPageMetadata({
   description,
   path,
   imagePath,
+  keywords,
   noIndex = false,
 }: BuildPageMetadataOptions): Metadata {
   const resolvedTitle = title ?? siteSettings.defaultTitle;
@@ -25,6 +27,7 @@ export function buildPageMetadata({
     ...baseMetadata,
     title: resolvedTitle,
     description,
+    keywords,
     alternates: {
       canonical,
     },

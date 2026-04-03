@@ -74,6 +74,6 @@ All motion and animation decisions must follow the rules defined here:
 
 ## Важно перед production
 
-- подключить production-домен `https://сайтхаб.рф`
+- подключить production-домен `https://сайтхаб.рф` или задать `SITE_URL` / `NEXT_PUBLIC_SITE_URL` для корректных canonical, OG и sitemap
 - заменить placeholder `telegramUrl` и `ctaHref`
 - при необходимости поменять seeded demo cases на реальные кейсы через CMS или markdown

@@ -4,10 +4,12 @@ import { notFound } from "next/navigation";
 
 import { CaseSection } from "@/components/shared/case-section";
 import { CTASection } from "@/components/shared/cta-section";
+import { JsonLd } from "@/components/shared/json-ld";
 import { TrackedLink } from "@/components/shared/tracked-link";
 import { getProjectBySlug, getProjectSlugs } from "@/lib/content/queries";
 import { buildPageMetadata } from "@/lib/seo";
 import { siteSettings } from "@/lib/site-config";
+import { buildProjectJsonLd } from "@/lib/structured-data";
 
 type ProjectPageProps = {
   params: Promise<{
@@ -41,7 +43,13 @@ export async function generateMetadata({
     title: project.seoTitle,
     description: project.seoDescription,
     path: `/portfolio/${project.slug}`,
-    imagePath: project.coverImage ?? siteSettings.defaultOgImage,
+    imagePath: `/portfolio/${project.slug}/opengraph-image`,
+    keywords: [
+      project.title,
+      project.slug,
+      project.category,
+      ...project.services,
+    ],
   });
 }
 
@@ -64,9 +72,11 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const coverCaption = "Короткий оффер и быстрый переход к заявке без лишних шагов.";
   const coreStatement = `Страница решает задачу: ${project.problem} Решение — ${project.solution}`;
   const whyItWorks = `Логика проста: ${project.solution} Результат — ${project.result}`;
+  const jsonLd = buildProjectJsonLd(project);
 
   return (
     <div className="space-y-16 py-12 md:space-y-20 md:py-16">
+      <JsonLd data={jsonLd} />
       <section className="space-y-6">
         <TrackedLink
           href="/portfolio"

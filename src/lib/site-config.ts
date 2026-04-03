@@ -16,7 +16,12 @@ if (!siteSettingsResult.success) {
 
 export const siteSettings = siteSettingsResult.data;
 
-const metadataBaseUrl = new URL(siteSettings.siteUrl);
+const resolvedSiteUrl =
+  process.env.SITE_URL?.trim() ||
+  process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
+  siteSettings.siteUrl;
+
+const metadataBaseUrl = new URL(resolvedSiteUrl);
 
 function trimTrailingSlash(value: string) {
   return value.endsWith("/") ? value.slice(0, -1) : value;
@@ -41,12 +46,12 @@ export const baseMetadata: Metadata = {
     locale: "ru_RU",
     type: "website",
     url: toAbsoluteSiteUrl("/"),
-    images: [toAbsoluteSiteUrl(siteSettings.defaultOgImage)],
+    images: [toAbsoluteSiteUrl("/opengraph-image")],
   },
   twitter: {
     card: "summary_large_image",
     title: siteSettings.defaultTitle,
     description: siteSettings.defaultDescription,
-    images: [toAbsoluteSiteUrl(siteSettings.defaultOgImage)],
+    images: [toAbsoluteSiteUrl("/opengraph-image")],
   },
 };

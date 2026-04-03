@@ -15,6 +15,12 @@ function HeroProductComposition({ project }: { project: Project }) {
     .filter(Boolean);
   const coverImage = project.coverImage ?? siteSettings.defaultOgImage;
   const primaryService = project.services[0] ?? "Лендинг";
+  const formatLabel =
+    project.slug === "mblmaster" ? "Коммерческий сайт" : "Эмоциональный лендинг";
+  const topRightLabel =
+    project.slug === "mblmaster" ? "Категории + кейсы" : "Один CTA";
+  const footerLabel =
+    project.slug === "mblmaster" ? "Локальный спрос" : "Редакционный ритм";
 
   return (
     <div className="relative mx-auto w-[90%] max-w-[34rem] md:w-[88%] lg:mx-0 lg:w-full lg:max-w-[34rem] lg:translate-x-5">
@@ -40,8 +46,8 @@ function HeroProductComposition({ project }: { project: Project }) {
 
         <div className="hero-proof-visual-fragment">
           <div className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-4 py-3 text-[0.62rem] font-medium uppercase tracking-[0.2em] text-black/34">
-            <span>Первый экран</span>
-            <span>Быстрая заявка</span>
+            <span>{formatLabel}</span>
+            <span>{topRightLabel}</span>
           </div>
           <div className="absolute inset-x-0 bottom-0 top-10">
             <Image
@@ -66,7 +72,7 @@ function HeroProductComposition({ project }: { project: Project }) {
           </p>
           <div className="mt-4 h-px w-full bg-black/10" />
           <p className="mt-4 text-[0.72rem] uppercase tracking-[0.18em] text-black/28">
-            Спокойный ритм
+            {footerLabel}
           </p>
         </div>
       </div>

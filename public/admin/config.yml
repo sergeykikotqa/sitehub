@@ -42,7 +42,7 @@ collections:
         options:
           - { label: "Draft", value: "draft" }
           - { label: "Published", value: "published" }
-      - { label: "Название", name: "title", widget: "string", required: true, hint: "Используйте единый прикладной паттерн: например, Кухни на заказ." }
+      - { label: "Название", name: "title", widget: "string", required: true, hint: "Используйте понятное имя кейса или бренда: например, MBLMaster." }
       - { label: "Slug", name: "slug", widget: "string", required: true, pattern: *slug_pattern, hint: *slug_hint }
       - { label: "Категория", name: "category", widget: "string", required: true }
       - { label: "Краткое описание", name: "shortDescription", widget: "text", required: true, hint: "1–2 коротких предложения." }
