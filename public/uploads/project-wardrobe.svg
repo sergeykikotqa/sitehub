@@ -1,0 +1,24 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1600" height="1000" rx="40" fill="#EFE4D8"/>
+  <circle cx="1332" cy="170" r="214" fill="#DFC1A7"/>
+  <circle cx="244" cy="816" r="220" fill="#D4AA88"/>
+  <rect x="72" y="72" width="1456" height="856" rx="36" fill="#FFF8F1" stroke="#D7C4B5"/>
+  <rect x="132" y="150" width="272" height="52" rx="26" fill="#B96A34"/>
+  <text x="176" y="183" fill="#FFF8F1" font-family="Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="3">WARDROBE CASE</text>
+  <text x="132" y="312" fill="#201C18" font-family="Arial, sans-serif" font-size="92" font-weight="700">Шкафы</text>
+  <text x="132" y="404" fill="#201C18" font-family="Arial, sans-serif" font-size="92" font-weight="700">на заказ</text>
+  <rect x="132" y="454" width="416" height="20" rx="10" fill="#7A6A5C"/>
+  <rect x="132" y="490" width="358" height="20" rx="10" fill="#7A6A5C"/>
+  <rect x="132" y="562" width="232" height="62" rx="31" fill="#201C18"/>
+  <text x="183" y="601" fill="#FFF8F1" font-family="Arial, sans-serif" font-size="22" font-weight="700">VIEW CONCEPT</text>
+  <rect x="132" y="706" width="188" height="132" rx="26" fill="#F2E6DA"/>
+  <rect x="340" y="706" width="188" height="132" rx="26" fill="#F2E6DA"/>
+  <rect x="548" y="706" width="188" height="132" rx="26" fill="#F2E6DA"/>
+  <rect x="1016" y="132" width="372" height="676" rx="34" fill="#201C18"/>
+  <rect x="1068" y="184" width="268" height="20" rx="10" fill="#FFF8F1"/>
+  <rect x="1068" y="220" width="188" height="20" rx="10" fill="#FFF8F1"/>
+  <rect x="1068" y="300" width="268" height="364" rx="28" fill="#2D2722"/>
+  <rect x="1092" y="328" width="104" height="308" rx="18" fill="#E9D2BE"/>
+  <rect x="1208" y="328" width="104" height="308" rx="18" fill="#D6B28E"/>
+  <rect x="1068" y="716" width="268" height="40" rx="20" fill="#B96A34"/>
+</svg>

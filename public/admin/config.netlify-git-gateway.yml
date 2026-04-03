@@ -1,0 +1,126 @@
+local_backend: true
+
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: public/uploads
+public_folder: /uploads
+
+editor:
+  preview: false
+
+slug_hint: &slug_hint "Только латиница, цифры и дефисы. После публикации меняйте slug только вместе с redirect."
+slug_pattern: &slug_pattern
+  - "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+  - "Используйте только строчные латинские буквы, цифры и дефисы."
+relative_or_absolute_pattern: &relative_or_absolute_pattern
+  - "^(\\/[^\\s]*)|(https?:\\/\\/[^\\s]+)$"
+  - "Используйте относительный путь или полный URL."
+absolute_url_pattern: &absolute_url_pattern
+  - "^https?:\\/\\/[^\\s]+$"
+  - "Укажите полный URL с http:// или https://."
+
+collections:
+  - name: projects
+    label: Кейсы
+    label_singular: Кейс
+    folder: content/projects
+    create: true
+    extension: md
+    format: frontmatter
+    slug: "{{slug}}"
+    identifier_field: slug
+    summary: "{{title}} · {{status}}"
+    fields:
+      - label: "Статус"
+        name: "status"
+        widget: "select"
+        required: true
+        default: "draft"
+        options:
+          - { label: "Draft", value: "draft" }
+          - { label: "Published", value: "published" }
+      - { label: "Название", name: "title", widget: "string", required: true, hint: "Используйте единый прикладной паттерн: например, Кухни на заказ." }
+      - { label: "Slug", name: "slug", widget: "string", required: true, pattern: *slug_pattern, hint: *slug_hint }
+      - { label: "Категория", name: "category", widget: "string", required: true }
+      - { label: "Краткое описание", name: "shortDescription", widget: "text", required: true, hint: "1–2 коротких предложения." }
+      - { label: "Ссылка на проект", name: "projectUrl", widget: "string", required: false, pattern: *absolute_url_pattern, hint: "Полный URL уже опубликованного сайта." }
+      - label: "Услуги"
+        name: "services"
+        widget: "list"
+        required: true
+        min: 1
+        field: { label: "Услуга", name: "service", widget: "string" }
+      - { label: "Featured", name: "featured", widget: "boolean", required: true, default: false }
+      - { label: "Order", name: "order", widget: "number", required: false, min: 0, value_type: "int" }
+      - { label: "Дата публикации", name: "publishedAt", widget: "datetime", format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false, required: true, default: "{{now}}" }
+      - { label: "Cover image", name: "coverImage", widget: "image", required: false }
+      - { label: "Cover alt", name: "coverAlt", widget: "string", required: false }
+      - { label: "SEO title", name: "seoTitle", widget: "string", required: true }
+      - { label: "SEO description", name: "seoDescription", widget: "text", required: true }
+      - { label: "Задача", name: "problem", widget: "text", required: true }
+      - { label: "Решение", name: "solution", widget: "text", required: true }
+      - { label: "Результат", name: "result", widget: "text", required: true }
+      - { label: "Markdown body", name: "body", widget: "markdown", required: false }
+
+  - name: settings
+    label: Настройки
+    delete: false
+    editor:
+      preview: false
+    files:
+      - name: site-settings
+        label: Настройки сайта
+        file: content/settings/site.json
+        format: json
+        fields:
+          - { label: "Brand name", name: "brandName", widget: "string", required: true }
+          - { label: "Site URL", name: "siteUrl", widget: "string", required: true, pattern: *absolute_url_pattern }
+          - { label: "Telegram URL", name: "telegramUrl", widget: "string", required: true, pattern: *absolute_url_pattern }
+          - { label: "Location label", name: "locationLabel", widget: "string", required: true }
+          - { label: "Default title", name: "defaultTitle", widget: "string", required: true }
+          - { label: "Default description", name: "defaultDescription", widget: "text", required: true }
+          - { label: "Default OG image", name: "defaultOgImage", widget: "image", required: true }
+          - { label: "CTA label", name: "ctaLabel", widget: "string", required: true }
+          - { label: "CTA href", name: "ctaHref", widget: "string", required: true, pattern: *absolute_url_pattern }
+          - label: "Navigation"
+            name: "navigation"
+            widget: "list"
+            required: true
+            min: 1
+            max: 1
+            summary: "{{fields.label}}"
+            fields:
+              - { label: "Label", name: "label", widget: "string", required: true }
+              - { label: "Href", name: "href", widget: "string", required: true, pattern: *relative_or_absolute_pattern }
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Eyebrow", name: "eyebrow", widget: "string", required: true }
+              - { label: "Title", name: "title", widget: "string", required: true }
+              - { label: "Subtitle", name: "subtitle", widget: "text", required: true }
+              - { label: "Supporting title", name: "supportingTitle", widget: "string", required: true }
+          - label: "Portfolio"
+            name: "portfolio"
+            widget: "object"
+            fields:
+              - { label: "Title", name: "title", widget: "string", required: true }
+              - { label: "Description", name: "description", widget: "text", required: true }
+          - label: "Footer"
+            name: "footer"
+            widget: "object"
+            fields:
+              - { label: "Note", name: "note", widget: "text", required: true }
+          - label: "Legal"
+            name: "legal"
+            widget: "object"
+            fields:
+              - { label: "Footer trust line", name: "footerTrustLine", widget: "string", required: true }
+              - { label: "Legal link label", name: "legalLinkLabel", widget: "string", required: true }
+              - { label: "Legal page title", name: "legalPageTitle", widget: "string", required: true }
+              - { label: "Legal status line", name: "legalStatusLine", widget: "text", required: true }
+              - { label: "Legal description", name: "legalDescription", widget: "text", required: true }
+              - { label: "Legal contacts note", name: "legalContactsNote", widget: "text", required: true }
+              - { label: "Legal last updated", name: "legalLastUpdated", widget: "string", required: false }

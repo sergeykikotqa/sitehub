@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# СайтХаб
 
-## Getting Started
+Минималистичный лендинг-портфолио для услуги “создание сайтов для локального бизнеса”. Проект собран на `Next.js App Router`, хранит кейсы в markdown и поддерживает контентный workflow через `Decap CMS`.
 
-First, run the development server:
+## Что внутри
+
+- главная `/` с продающим hero и единым Telegram CTA
+- каталог кейсов `/portfolio`
+- detail pages `/portfolio/[slug]`
+- `robots.txt`, `sitemap.xml`, 404 и базовый analytics bridge
+- `public/admin` для редактирования `settings` и `projects`
+
+## Стек
+
+- `Next.js 16`
+- `TypeScript`
+- `Tailwind CSS 4`
+- `gray-matter`
+- `zod`
+- `react-markdown`
+- `Decap CMS`
+
+## Локальный запуск
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Сайт откроется на [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Локальный CMS workflow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev:cms
+```
 
-## Learn More
+Перед запуском защищённой админки задайте env-переменные:
 
-To learn more about Next.js, take a look at the following resources:
+```powershell
+$env:SITEHUB_ADMIN_USERNAME="admin"
+$env:SITEHUB_ADMIN_PASSWORD="strong-password"
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+После этого доступны:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- сайт: [http://localhost:3000](http://localhost:3000)
+- CMS: [http://localhost:3000/admin](http://localhost:3000/admin)
 
-## Deploy on Vercel
+Если GitHub/Netlify auth ещё не готов или `/admin` временно выключен, контент можно редактировать напрямую через markdown-файлы.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Контент
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `content/settings/site.json` — brand, SEO, CTA, navigation
+- `content/projects/*.md` — кейсы портфолио
+- `public/uploads/*` — OG и cover assets
+
+## Модель кейса
+
+- `status: draft | published` управляет видимостью на сайте
+- `projectUrl` опционален и нужен для кнопки `Открыть сайт` на detail page
+
+## Проверка
+
+```bash
+npm run lint
+npm run build
+```
+
+## Motion Guidelines
+
+All motion and animation decisions must follow the rules defined here:
+→ /docs/motion-guidelines.md
+
+## Важно перед production
+
+- подключить production-домен `https://сайтхаб.рф`
+- заменить placeholder `telegramUrl` и `ctaHref`
+- при необходимости поменять seeded demo cases на реальные кейсы через CMS или markdown
