@@ -12,8 +12,8 @@ services:
 featured: true
 order: 2
 publishedAt: "2026-04-03"
-coverImage: "/uploads/project-criatevmebel.svg"
-coverAlt: "Лендинг MESTO — кейс мебели на заказ"
+coverImage: "/uploads/mesto-lead.png"
+coverAlt: "Первый экран лендинга MESTO"
 seoTitle: "MESTO — кейс лендинга для мебели на заказ"
 seoDescription: "Реальный кейс MESTO: минималистичный лендинг про мебель на заказ с одним Telegram CTA, proof-блоками и спокойной редакционной подачей."
 problem: "Нужно было сделать не очередной каталог мебели, а короткий эмоциональный лендинг, который быстро объясняет ценность и не перегружает человека формами, меню и десятком сценариев."

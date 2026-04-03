@@ -1,6 +1,10 @@
-import { ProjectGrid } from "@/components/portfolio/project-grid";
+import {
+  PortfolioEditorialModule,
+  PortfolioSystemModule,
+} from "@/components/portfolio/portfolio-case-modules";
 import { CTASection } from "@/components/shared/cta-section";
 import { JsonLd } from "@/components/shared/json-ld";
+import { getCasePresentation } from "@/lib/case-presentation";
 import { getAllProjects } from "@/lib/content/queries";
 import { buildPageMetadata } from "@/lib/seo";
 import { siteSettings } from "@/lib/site-config";
@@ -23,28 +27,44 @@ export const metadata = buildPageMetadata({
 export default async function PortfolioPage() {
   const projects = await getAllProjects();
   const jsonLd = buildPortfolioJsonLd(projects);
+  const systemProject = projects.find((project) => project.slug === "mblmaster");
+  const editorialProject = projects.find((project) => project.slug === "criatevmebel");
 
   return (
-    <div className="space-y-16 py-12 md:space-y-20 md:py-16">
+    <div className="space-y-20 py-12 md:space-y-28 md:py-16">
       <JsonLd data={jsonLd} />
-      <section className="surface-card px-6 py-8 md:px-8 md:py-10">
-        <div className="max-w-3xl space-y-4">
-          <p className="section-kicker">Portfolio</p>
+      <section className="editorial-intro space-y-4">
+        <div className="max-w-4xl space-y-4">
+          <p className="section-kicker">Портфолио</p>
           <h1 className="section-title max-w-[13ch] text-balance">
             MBLMaster и MESTO
           </h1>
           <p className="text-lg font-medium leading-7 text-foreground/76">
-            Коммерческий сайт и эмоциональный лендинг для мебели на заказ
+            Не каталог шаблонов, а индекс двух разных сценариев под одну и ту же нишу
           </p>
           <p className="body-copy max-w-2xl">{siteSettings.portfolio.description}</p>
         </div>
       </section>
 
-      <ProjectGrid projects={projects} priorityCount={2} />
+        <div className="space-y-10">
+          {systemProject ? (
+            <PortfolioSystemModule
+              project={systemProject}
+              presentation={getCasePresentation(systemProject)}
+              priority
+            />
+          ) : null}
+          {editorialProject ? (
+            <PortfolioEditorialModule
+              project={editorialProject}
+              presentation={getCasePresentation(editorialProject)}
+            />
+          ) : null}
+      </div>
 
       <CTASection
-        title="Нужен сайт в таком уровне проработки"
-        description="Можно собрать либо большой коммерческий маршрут как у MBLMaster, либо короткий эмоциональный лендинг в логике MESTO."
+        title="Подберём правильный формат сайта"
+        description="Либо соберём системный коммерческий маршрут, либо короткий лендинг с proof-сценами — в зависимости от того, что реально решит задачу бизнеса."
         analyticsLocation="portfolio-bottom"
       />
     </div>

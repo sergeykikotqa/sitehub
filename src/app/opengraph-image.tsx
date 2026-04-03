@@ -3,12 +3,24 @@ import { createOgImage, size } from "@/lib/og";
 export const contentType = "image/png";
 export { size };
 
-export default function Image() {
+export default async function Image() {
   return createOgImage({
-    eyebrow: "sitehub",
+    eyebrow: "Подход студии",
     title: "MBLMaster и MESTO",
     description:
-      "Два реальных кейса в мебельной нише: коммерческий сайт под Иркутск и эмоциональный лендинг с одним Telegram CTA.",
+      "Два реальных кейса в мебельной нише: системный коммерческий сайт и короткий лендинг с proof-блоками и одним CTA.",
     accent: "#b88458",
+    previews: [
+      {
+        src: "/uploads/mblmaster-og.png",
+        objectPosition: "center top",
+      },
+      {
+        src: "/uploads/mesto-og.png",
+        objectPosition: "center top",
+      },
+    ],
+    footerLeft: "СайтХаб",
+    footerRight: "MBLMaster и MESTO",
   });
 }

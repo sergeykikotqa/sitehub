@@ -3,6 +3,14 @@ export interface NavigationItem {
   href: string;
 }
 
+export type CtaRouteKey = "system" | "editorial";
+
+export interface CtaRouteContent {
+  label: string;
+  description: string;
+  analyticsKey: string;
+}
+
 export interface HeroContent {
   eyebrow: string;
   title: string;
@@ -39,6 +47,7 @@ export interface SiteSettings {
   defaultOgImage: string;
   ctaLabel: string;
   ctaHref: string;
+  ctaRoutes: Record<CtaRouteKey, CtaRouteContent>;
   navigation: NavigationItem[];
   hero: HeroContent;
   portfolio: PortfolioContent;

@@ -4,9 +4,9 @@ import { siteSettings } from "@/lib/site-config";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 border-t border-border/90 py-14 text-muted">
+    <footer className="mt-28 border-t border-border/70 py-14 text-muted">
       <Container>
-        <div className="surface-panel flex flex-col gap-6 px-6 py-7 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div className="space-y-2">
             <span className="brand-wordmark-footer inline-flex items-center">
               СайтХаб
@@ -32,7 +32,7 @@ export function SiteFooter() {
             rel="noreferrer"
             eventName="cta_click"
             eventParams={{ location: "footer", target: "telegram" }}
-            className="button-inverse text-sm font-medium"
+            className="button-secondary text-sm font-medium"
           >
             {siteSettings.ctaLabel}
           </TrackedLink>

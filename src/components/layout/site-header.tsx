@@ -21,8 +21,8 @@ export function SiteHeader({
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur-xl">
-      <div className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <header className="border-b border-border/55 bg-transparent">
+      <div className="mx-auto flex min-h-[5.25rem] w-full max-w-[82rem] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
           aria-label="СайтХаб — на главную"
@@ -30,8 +30,8 @@ export function SiteHeader({
         >
           СайтХаб
         </Link>
-        <div className="flex items-center gap-2">
-          <nav className="flex items-center gap-1 rounded-full border border-border bg-white/60 p-1">
+        <div className="flex items-center gap-4">
+          <nav className="flex items-center gap-4">
             {navigationItems.map((item) => {
               const isActive =
                 pathname === item.href ||
@@ -42,8 +42,8 @@ export function SiteHeader({
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "rounded-full px-4 py-2 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground focus-visible:outline-none",
-                    isActive && "bg-foreground text-white",
+                    "text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground focus-visible:outline-none",
+                    isActive && "text-foreground",
                   )}
                 >
                   {item.label}
@@ -57,7 +57,7 @@ export function SiteHeader({
             rel="noreferrer"
             eventName="cta_click"
             eventParams={{ location: "header", target: "telegram" }}
-            className="button-primary hidden text-sm font-medium md:inline-flex"
+            className="button-secondary hidden text-sm font-medium md:inline-flex"
           >
             {ctaLabel}
           </TrackedLink>

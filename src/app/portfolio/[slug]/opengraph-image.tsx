@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 
+import { getCasePresentation } from "@/lib/case-presentation";
 import { createOgImage, size } from "@/lib/og";
 import { getProjectBySlug } from "@/lib/content/queries";
 
@@ -20,11 +21,21 @@ export default async function Image({ params }: ProjectOgImageProps) {
     notFound();
   }
 
+  const presentation = getCasePresentation(project);
+
   return createOgImage({
-    eyebrow: project.slug === "mblmaster" ? "commercial site" : "landing page",
+    eyebrow: presentation.roleLabel,
     title: project.title,
     description: project.seoDescription,
     accent: project.slug === "mblmaster" ? "#75806c" : "#b48559",
     theme: project.slug === "mblmaster" ? "light" : "dark",
+    previews: [
+      {
+        src: presentation.visualAssets.og.src,
+        objectPosition: presentation.visualAssets.og.objectPosition,
+      },
+    ],
+    footerLeft: "СайтХаб",
+    footerRight: project.slug === "mblmaster" ? "системный сайт" : "короткий лендинг",
   });
 }

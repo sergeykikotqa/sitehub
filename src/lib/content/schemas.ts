@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import type {
+  CtaRouteContent,
   FooterContent,
   HeroContent,
   LegalContent,
@@ -32,6 +33,12 @@ const absoluteUrlSchema = requiredString
 export const navigationItemSchema: z.ZodType<NavigationItem> = z.object({
   label: requiredString,
   href: hrefSchema,
+});
+
+export const ctaRouteContentSchema: z.ZodType<CtaRouteContent> = z.object({
+  label: requiredString,
+  description: requiredString,
+  analyticsKey: requiredString,
 });
 
 export const heroContentSchema: z.ZodType<HeroContent> = z.object({
@@ -70,6 +77,10 @@ export const siteSettingsSchema: z.ZodType<SiteSettings> = z.object({
   defaultOgImage: hrefSchema,
   ctaLabel: requiredString,
   ctaHref: absoluteUrlSchema,
+  ctaRoutes: z.object({
+    system: ctaRouteContentSchema,
+    editorial: ctaRouteContentSchema,
+  }),
   navigation: z.array(navigationItemSchema).min(1),
   hero: heroContentSchema,
   portfolio: portfolioContentSchema,

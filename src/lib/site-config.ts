@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import rawSiteSettings from "../../content/settings/site.json";
 
 import { siteSettingsSchema } from "@/lib/content/schemas";
+import type { CtaRouteContent, CtaRouteKey } from "@/types/content";
 
 const siteSettingsResult = siteSettingsSchema.safeParse(rawSiteSettings);
 
@@ -30,6 +31,14 @@ function trimTrailingSlash(value: string) {
 export function toAbsoluteSiteUrl(path: string) {
   const normalizedPath = path === "/" ? "/" : path.startsWith("/") ? path : `/${path}`;
   return new URL(normalizedPath, `${trimTrailingSlash(metadataBaseUrl.toString())}/`).toString();
+}
+
+export function getCtaRoute(route: CtaRouteKey): CtaRouteContent {
+  return siteSettings.ctaRoutes[route];
+}
+
+export function getAlternateCtaRoute(route: CtaRouteKey): CtaRouteKey {
+  return route === "system" ? "editorial" : "system";
 }
 
 export const baseMetadata: Metadata = {
