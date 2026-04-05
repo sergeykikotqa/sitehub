@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import {
+  DefaultCaseTemplate,
   EditorialCaseTemplate,
   SystemCaseTemplate,
 } from "@/components/portfolio/case-templates";
@@ -63,10 +64,12 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   return (
     <>
       <JsonLd data={jsonLd} />
-      {presentation.mode === "system" ? (
+      {presentation?.mode === "system" ? (
         <SystemCaseTemplate project={project} presentation={presentation} />
-      ) : (
+      ) : presentation?.mode === "editorial" ? (
         <EditorialCaseTemplate project={project} presentation={presentation} />
+      ) : (
+        <DefaultCaseTemplate project={project} />
       )}
     </>
   );

@@ -1,10 +1,11 @@
-"use client";
-
 import Link from "next/link";
 
-import { type AnalyticsParams, sendAnalyticsEvent } from "@/lib/analytics";
+import {
+  type AnalyticsParams,
+  serializeAnalyticsParams,
+} from "@/lib/analytics";
 
-type TrackedLinkProps = React.ComponentProps<typeof Link> & {
+type TrackedLinkProps = Omit<React.ComponentProps<typeof Link>, "onClick"> & {
   eventName?: string;
   eventParams?: AnalyticsParams;
 };
@@ -12,19 +13,17 @@ type TrackedLinkProps = React.ComponentProps<typeof Link> & {
 export function TrackedLink({
   eventName,
   eventParams,
-  onClick,
   ...props
 }: TrackedLinkProps) {
+  const analyticsPayload = eventName
+    ? serializeAnalyticsParams(eventParams)
+    : undefined;
+
   return (
     <Link
       {...props}
-      onClick={(event) => {
-        if (eventName) {
-          sendAnalyticsEvent(eventName, eventParams);
-        }
-
-        onClick?.(event);
-      }}
+      data-analytics-event={eventName}
+      data-analytics-payload={analyticsPayload}
     />
   );
 }

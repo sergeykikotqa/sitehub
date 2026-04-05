@@ -30,6 +30,9 @@ export default function RootLayout({
   return (
     <html lang="ru" className={cn(manrope.variable, ibmPlexMono.variable)}>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        <a href="#main-content" className="skip-link">
+          Перейти к содержимому
+        </a>
         <Suspense fallback={null}>
           <AnalyticsBridge />
         </Suspense>

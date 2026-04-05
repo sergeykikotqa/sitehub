@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 type CaseVisualFrameProps = {
   asset: CaseVisualAsset;
   className?: string;
-  priority?: boolean;
+  loadPriority?: "auto" | "high";
   tone?: "light" | "dark";
 };
 
@@ -26,7 +26,7 @@ function getAspectClass(aspect: CaseVisualAsset["aspect"]) {
 export function CaseVisualFrame({
   asset,
   className,
-  priority = false,
+  loadPriority = "auto",
   tone = "light",
 }: CaseVisualFrameProps) {
   return (
@@ -42,7 +42,8 @@ export function CaseVisualFrame({
           src={asset.src}
           alt={asset.alt}
           fill
-          priority={priority}
+          fetchPriority={loadPriority === "high" ? "high" : undefined}
+          loading={loadPriority === "high" ? "eager" : undefined}
           className="object-cover"
           style={{ objectPosition: asset.objectPosition ?? "center top" }}
           sizes="(min-width: 1280px) 42vw, (min-width: 768px) 70vw, 100vw"

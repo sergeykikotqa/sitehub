@@ -72,6 +72,11 @@ npm run build
 All motion and animation decisions must follow the rules defined here:
 → /docs/motion-guidelines.md
 
+## Decision Tuning Framework
+
+Post-launch product decisions must follow the benchmark and guardrail rules defined here:
+→ /docs/decision-tuning-framework.md
+
 ## Важно перед production
 
 - подключить production-домен `https://сайтхаб.рф` или задать `SITE_URL` / `NEXT_PUBLIC_SITE_URL` для корректных canonical, OG и sitemap

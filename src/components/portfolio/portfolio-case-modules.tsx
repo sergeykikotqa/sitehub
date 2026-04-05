@@ -11,6 +11,34 @@ type PortfolioCaseModuleProps = {
   priority?: boolean;
 };
 
+function splitSentences(text: string) {
+  return text
+    .split(/(?<=[.!?])\s+/)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+}
+
+function StackedCopy({
+  text,
+  dark = false,
+}: {
+  text: string;
+  dark?: boolean;
+}) {
+  const [lead, ...supporting] = splitSentences(text);
+
+  return (
+    <div className={cn("stacked-copy", dark && "stacked-copy-dark")}>
+      {lead ? <p className="stacked-copy-lead">{lead}</p> : null}
+      {supporting.map((sentence, index) => (
+        <p key={`${sentence}-${index}`} className="stacked-copy-support">
+          {sentence}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 function SignalList({
   signals,
   dark = false,
@@ -39,71 +67,77 @@ export function PortfolioSystemModule({
 }: PortfolioCaseModuleProps) {
   return (
     <article className="surface-card px-6 py-6 md:px-8 md:py-8">
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] xl:items-start">
-        <CaseVisualFrame
-          asset={presentation.visualAssets.portfolio}
-          priority={priority}
-        />
+      <div className="space-y-6">
+        <div className="max-w-3xl space-y-3">
+          <p className="section-kicker">{presentation.portfolio.label}</p>
+          <h2 className="section-title max-w-[12ch] text-balance">
+            {presentation.portfolio.title}
+          </h2>
+        </div>
 
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="section-kicker">{presentation.roleLabel}</span>
-              <span className="case-mode-pill">{project.category}</span>
+        <div className="rounded-[28px] border border-border/80 bg-white/68 p-5 md:p-6">
+          <div className="grid gap-5 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] xl:gap-6">
+            <div className="space-y-3 xl:border-r xl:border-border/70 xl:pr-6">
+              <p className="section-kicker">Ситуация</p>
+              <StackedCopy text={presentation.portfolio.situation} />
             </div>
             <div className="space-y-3">
-              <h2 className="section-title max-w-[13ch] text-balance">
-                {presentation.compareTitle}
-              </h2>
-              <p className="body-copy max-w-[40rem]">
-                {presentation.portfolioSummary}
-              </p>
+              <p className="section-kicker">Почему это работает</p>
+              <StackedCopy text={presentation.portfolio.systemWhyItWorks ?? ""} />
             </div>
           </div>
+        </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
-            {presentation.overview.slice(0, 2).map((item) => (
-              <div
-                key={`${project.slug}-${item.label}`}
-                className="rounded-[24px] border border-border/80 bg-white/68 p-4"
-              >
-                <p className="section-kicker">{item.label}</p>
-                <p className="mt-3 text-[0.98rem] leading-7 text-foreground/78">
-                  {item.value}
-                </p>
-              </div>
-            ))}
+        <div className="rounded-[28px] border border-[rgba(158,90,51,0.16)] bg-[rgba(255,248,240,0.82)] p-5">
+          <p className="section-kicker">Доказательство на кейсе</p>
+          <div className="mt-3">
+            <StackedCopy text={presentation.portfolio.systemProof ?? ""} />
           </div>
+        </div>
 
-          <SignalList signals={presentation.signals} />
-
-          <div className="flex flex-wrap gap-3">
-            <TrackedLink
-              href={`/portfolio/${project.slug}`}
-              eventName="portfolio_case_open"
-              eventParams={{ slug: project.slug, location: "portfolio-system" }}
-              className="button-primary text-sm font-medium"
-            >
-              Открыть разбор
-            </TrackedLink>
-            {project.projectUrl ? (
-              <TrackedLink
-                href={project.projectUrl}
-                target="_blank"
-                rel="noreferrer"
-                eventName="project_external_open"
-                eventParams={{ slug: project.slug, location: "portfolio-system" }}
-                className="button-secondary text-sm font-medium"
-              >
-                Смотреть live
-              </TrackedLink>
-            ) : null}
-            <RouteContactLink
-              route="system"
-              analyticsLocation="portfolio-system"
-              className="button-secondary text-sm font-medium"
-            />
+        <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(19rem,0.98fr)]">
+          <CaseVisualFrame
+            asset={presentation.visualAssets.portfolio}
+            loadPriority={priority ? "high" : "auto"}
+          />
+          <div className="space-y-4">
+            <SignalList signals={presentation.signals} />
+            <div className="grid gap-4 sm:grid-cols-2">
+              {presentation.overview.slice(0, 2).map((item) => (
+                <div
+                  key={`${project.slug}-${item.label}`}
+                  className="rounded-[24px] border border-border/80 bg-white/68 p-4"
+                >
+                  <p className="section-kicker">{item.label}</p>
+                  <p className="mt-3 text-[0.98rem] leading-7 text-foreground/78">
+                    {item.value}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <RouteContactLink
+            route="system"
+            analyticsSurface="portfolio"
+            className="button-primary w-full justify-center text-sm font-medium sm:w-auto"
+          >
+            {presentation.portfolio.primaryCta}
+          </RouteContactLink>
+          <TrackedLink
+            href={`/portfolio/${project.slug}`}
+            eventName="portfolio_case_open"
+            eventParams={{
+              case_slug: project.slug,
+              scenario: "system",
+              surface: "portfolio",
+            }}
+            className="button-secondary w-full justify-center text-sm font-medium sm:w-auto"
+          >
+            {presentation.portfolio.secondaryCta}
+          </TrackedLink>
         </div>
       </div>
     </article>
@@ -115,79 +149,76 @@ export function PortfolioEditorialModule({
   presentation,
   priority = false,
 }: PortfolioCaseModuleProps) {
-  const [proofCardAsset, , heroTypeAsset] = presentation.visualAssets.gallery;
+  const [proofCardAsset, proofFlowAsset, heroTypeAsset] =
+    presentation.visualAssets.gallery;
 
   return (
     <article className="surface-inverse px-6 py-6 md:px-8 md:py-8">
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,0.98fr)_minmax(21rem,0.92fr)] xl:items-start">
-        <div className="space-y-6">
-          <div className="space-y-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="section-kicker text-white/52">
-                {presentation.roleLabel}
-              </span>
-              <span className="case-mode-pill case-mode-pill-dark">
-                {project.category}
-              </span>
+      <div className="space-y-6">
+        <div className="max-w-3xl space-y-3">
+          <p className="section-kicker text-white/52">{presentation.portfolio.label}</p>
+          <h2 className="section-title max-w-[11ch] text-balance text-white">
+            {presentation.portfolio.title}
+          </h2>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5 md:p-6">
+          <div className="grid gap-5 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] xl:gap-6">
+            <div className="space-y-3 xl:border-r xl:border-white/10 xl:pr-6">
+              <p className="section-kicker text-white/62">Ситуация</p>
+              <StackedCopy text={presentation.portfolio.situation} dark />
             </div>
             <div className="space-y-3">
-              <h2 className="section-title max-w-[11ch] text-balance text-white">
-                {presentation.compareTitle}
-              </h2>
-              <p className="body-copy max-w-[38rem] text-white/72">
-                {presentation.portfolioSummary}
-              </p>
+              <p className="section-kicker text-white/62">Что срабатывает</p>
+              <StackedCopy text={presentation.portfolio.editorialProofFirst ?? ""} dark />
             </div>
-          </div>
-
-          <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5">
-            <p className="section-kicker text-white/52">Главный аргумент</p>
-            <p className="mt-3 text-[1rem] leading-8 text-white/78">
-              {presentation.heroCaption}
-            </p>
-          </div>
-
-          <SignalList signals={presentation.signals} dark />
-
-          <div className="flex flex-wrap gap-3">
-            <TrackedLink
-              href={`/portfolio/${project.slug}`}
-              eventName="portfolio_case_open"
-              eventParams={{ slug: project.slug, location: "portfolio-editorial" }}
-              className="button-primary button-primary-contrast text-sm font-medium"
-            >
-              Открыть разбор
-            </TrackedLink>
-            {project.projectUrl ? (
-              <TrackedLink
-                href={project.projectUrl}
-                target="_blank"
-                rel="noreferrer"
-                eventName="project_external_open"
-                eventParams={{ slug: project.slug, location: "portfolio-editorial" }}
-                className="button-secondary button-secondary-dark text-sm font-medium"
-              >
-                Смотреть live
-              </TrackedLink>
-            ) : null}
-            <RouteContactLink
-              route="editorial"
-              analyticsLocation="portfolio-editorial"
-              className="button-secondary button-secondary-dark text-sm font-medium"
-            />
           </div>
         </div>
 
-        <div className="grid gap-4">
+        <div className="grid gap-4 xl:grid-cols-[minmax(0,1.08fr)_minmax(18rem,0.92fr)]">
           <CaseVisualFrame
             asset={presentation.visualAssets.portfolio}
-            priority={priority}
+            loadPriority={priority ? "high" : "auto"}
             tone="dark"
           />
-          <div className="grid gap-4 md:grid-cols-[minmax(0,0.88fr)_minmax(15rem,1.12fr)]">
+          <div className="grid gap-4 md:grid-cols-[minmax(0,0.84fr)_minmax(15rem,1.16fr)]">
             <CaseVisualFrame asset={proofCardAsset} tone="dark" />
-            <CaseVisualFrame asset={heroTypeAsset} tone="dark" />
+            <div className="grid gap-4">
+              <CaseVisualFrame asset={proofFlowAsset} tone="dark" />
+              <CaseVisualFrame asset={heroTypeAsset} tone="dark" />
+            </div>
           </div>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-white/[0.05] p-5">
+          <p className="section-kicker text-white/62">Почему это работает</p>
+          <div className="mt-3">
+            <StackedCopy text={presentation.portfolio.editorialInterpretation ?? ""} dark />
+          </div>
+        </div>
+
+        <SignalList signals={presentation.signals} dark />
+
+        <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <RouteContactLink
+            route="editorial"
+            analyticsSurface="portfolio"
+            className="button-primary button-primary-contrast w-full justify-center text-sm font-medium sm:w-auto"
+          >
+            {presentation.portfolio.primaryCta}
+          </RouteContactLink>
+          <TrackedLink
+            href={`/portfolio/${project.slug}`}
+            eventName="portfolio_case_open"
+            eventParams={{
+              case_slug: project.slug,
+              scenario: "editorial",
+              surface: "portfolio",
+            }}
+            className="button-secondary button-secondary-dark w-full justify-center text-sm font-medium sm:w-auto"
+          >
+            {presentation.portfolio.secondaryCta}
+          </TrackedLink>
         </div>
       </div>
     </article>

@@ -4,14 +4,14 @@ import {
 } from "@/components/portfolio/portfolio-case-modules";
 import { CTASection } from "@/components/shared/cta-section";
 import { JsonLd } from "@/components/shared/json-ld";
-import { getCasePresentation } from "@/lib/case-presentation";
-import { getAllProjects } from "@/lib/content/queries";
+import { requireCasePresentation } from "@/lib/case-presentation";
+import { getFlagshipProjects } from "@/lib/content/queries";
 import { buildPageMetadata } from "@/lib/seo";
 import { siteSettings } from "@/lib/site-config";
 import { buildPortfolioJsonLd } from "@/lib/structured-data";
 
 export const metadata = buildPageMetadata({
-  title: `MBLMaster и MESTO — портфолио ${siteSettings.brandName}`,
+  title: `${siteSettings.portfolio.title} — портфолио ${siteSettings.brandName}`,
   description: siteSettings.portfolio.description,
   path: "/portfolio",
   imagePath: "/portfolio/opengraph-image",
@@ -25,47 +25,64 @@ export const metadata = buildPageMetadata({
 });
 
 export default async function PortfolioPage() {
-  const projects = await getAllProjects();
-  const jsonLd = buildPortfolioJsonLd(projects);
-  const systemProject = projects.find((project) => project.slug === "mblmaster");
-  const editorialProject = projects.find((project) => project.slug === "criatevmebel");
+  const flagshipProjects = await getFlagshipProjects();
+  const jsonLd = buildPortfolioJsonLd(flagshipProjects);
+  const systemCase = flagshipProjects
+    .map((project) => ({
+      project,
+      presentation: requireCasePresentation(project, "portfolio page"),
+    }))
+    .find((entry) => entry.presentation.mode === "system");
+  const editorialCase = flagshipProjects
+    .map((project) => ({
+      project,
+      presentation: requireCasePresentation(project, "portfolio page"),
+    }))
+    .find((entry) => entry.presentation.mode === "editorial");
+
+  if (!systemCase || !editorialCase) {
+    throw new Error(
+      "Expected flagshipCaseSlugs to resolve to one system case and one editorial case.",
+    );
+  }
 
   return (
     <div className="space-y-20 py-12 md:space-y-28 md:py-16">
       <JsonLd data={jsonLd} />
-      <section className="editorial-intro space-y-4">
-        <div className="max-w-4xl space-y-4">
+      <section className="max-w-4xl space-y-4">
+        <div className="space-y-4">
           <p className="section-kicker">Портфолио</p>
-          <h1 className="section-title max-w-[13ch] text-balance">
-            MBLMaster и MESTO
+          <h1 className="section-title max-w-[12ch] text-balance">
+            {siteSettings.portfolio.title}
           </h1>
-          <p className="text-lg font-medium leading-7 text-foreground/76">
-            Не каталог шаблонов, а индекс двух разных сценариев под одну и ту же нишу
+          <p className="body-copy max-w-2xl text-[1.02rem] leading-8">
+            Два формата сайтов под разные задачи. Здесь — как они работают на
+            практике.
           </p>
-          <p className="body-copy max-w-2xl">{siteSettings.portfolio.description}</p>
+          <p className="muted-copy max-w-2xl">{siteSettings.portfolio.description}</p>
         </div>
       </section>
 
-        <div className="space-y-10">
-          {systemProject ? (
-            <PortfolioSystemModule
-              project={systemProject}
-              presentation={getCasePresentation(systemProject)}
-              priority
-            />
-          ) : null}
-          {editorialProject ? (
-            <PortfolioEditorialModule
-              project={editorialProject}
-              presentation={getCasePresentation(editorialProject)}
-            />
-          ) : null}
+      <div className="space-y-10">
+        {systemCase ? (
+          <PortfolioSystemModule
+            project={systemCase.project}
+            presentation={systemCase.presentation}
+            priority
+          />
+        ) : null}
+        {editorialCase ? (
+          <PortfolioEditorialModule
+            project={editorialCase.project}
+            presentation={editorialCase.presentation}
+          />
+        ) : null}
       </div>
 
       <CTASection
         title="Подберём правильный формат сайта"
-        description="Либо соберём системный коммерческий маршрут, либо короткий лендинг с proof-сценами — в зависимости от того, что реально решит задачу бизнеса."
-        analyticsLocation="portfolio-bottom"
+        description="Если после проверки сценариев вам всё ещё нужен внешний взгляд, разберём задачу и подскажем, какой формат сайта реально сработает лучше."
+        analyticsSurface="portfolio"
       />
     </div>
   );

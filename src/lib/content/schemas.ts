@@ -14,6 +14,10 @@ import type {
 
 const requiredString = z.string().trim().min(1);
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const slugSchema = requiredString.regex(
+  slugPattern,
+  "Slug must use lowercase latin letters, numbers, and hyphens only.",
+);
 const projectStatusSchema: z.ZodType<ProjectStatus> = z.enum([
   "draft",
   "published",
@@ -28,6 +32,15 @@ const absoluteUrlSchema = requiredString
   .refine(
     (value) => value.startsWith("http://") || value.startsWith("https://"),
     "Expected an absolute http or https URL.",
+  );
+const telegramCtaHrefSchema = absoluteUrlSchema
+  .refine(
+    (value) => !/yourlink/i.test(value),
+    "CTA href must not use a placeholder value like 'yourlink'.",
+  )
+  .refine(
+    (value) => /^https:\/\/t\.me\/[A-Za-z0-9_]+\/?$/.test(value),
+    "CTA href must be a production Telegram URL in https://t.me/<username> format.",
   );
 
 export const navigationItemSchema: z.ZodType<NavigationItem> = z.object({
@@ -70,17 +83,22 @@ export const legalContentSchema: z.ZodType<LegalContent> = z.object({
 export const siteSettingsSchema: z.ZodType<SiteSettings> = z.object({
   brandName: requiredString,
   siteUrl: absoluteUrlSchema,
-  telegramUrl: absoluteUrlSchema,
   locationLabel: requiredString,
   defaultTitle: requiredString,
   defaultDescription: requiredString,
   defaultOgImage: hrefSchema,
-  ctaLabel: requiredString,
-  ctaHref: absoluteUrlSchema,
+  ctaHref: telegramCtaHrefSchema,
   ctaRoutes: z.object({
     system: ctaRouteContentSchema,
     editorial: ctaRouteContentSchema,
+    generic: ctaRouteContentSchema,
   }),
+  flagshipCaseSlugs: z
+    .tuple([slugSchema, slugSchema])
+    .refine(
+      ([first, second]) => first !== second,
+      "flagshipCaseSlugs must contain two unique slugs.",
+    ),
   navigation: z.array(navigationItemSchema).min(1),
   hero: heroContentSchema,
   portfolio: portfolioContentSchema,
@@ -91,10 +109,7 @@ export const siteSettingsSchema: z.ZodType<SiteSettings> = z.object({
 export const projectFrontmatterSchema: z.ZodType<ProjectFrontmatter> = z.object({
   status: projectStatusSchema,
   title: requiredString,
-  slug: requiredString.regex(
-    slugPattern,
-    "Slug must use lowercase latin letters, numbers, and hyphens only.",
-  ),
+  slug: slugSchema,
   projectUrl: absoluteUrlSchema.optional(),
   category: requiredString,
   shortDescription: requiredString,

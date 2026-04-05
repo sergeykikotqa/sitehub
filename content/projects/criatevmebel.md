@@ -12,7 +12,7 @@ services:
 featured: true
 order: 2
 publishedAt: "2026-04-03"
-coverImage: "/uploads/mesto-lead.png"
+coverImage: "/uploads/mesto-lead.webp"
 coverAlt: "Первый экран лендинга MESTO"
 seoTitle: "MESTO — кейс лендинга для мебели на заказ"
 seoDescription: "Реальный кейс MESTO: минималистичный лендинг про мебель на заказ с одним Telegram CTA, proof-блоками и спокойной редакционной подачей."

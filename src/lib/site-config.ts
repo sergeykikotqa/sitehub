@@ -17,6 +17,12 @@ if (!siteSettingsResult.success) {
 
 export const siteSettings = siteSettingsResult.data;
 
+if (/yourlink/i.test(siteSettings.ctaHref)) {
+  throw new Error(
+    "Invalid content/settings/site.json: ctaHref still uses a placeholder value.",
+  );
+}
+
 const resolvedSiteUrl =
   process.env.SITE_URL?.trim() ||
   process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
@@ -38,7 +44,15 @@ export function getCtaRoute(route: CtaRouteKey): CtaRouteContent {
 }
 
 export function getAlternateCtaRoute(route: CtaRouteKey): CtaRouteKey {
-  return route === "system" ? "editorial" : "system";
+  if (route === "system") {
+    return "editorial";
+  }
+
+  if (route === "editorial") {
+    return "system";
+  }
+
+  return "generic";
 }
 
 export const baseMetadata: Metadata = {

@@ -1,4 +1,4 @@
-import { TrackedLink } from "@/components/shared/tracked-link";
+import { CtaRouter } from "@/components/shared/cta-section";
 import { buildPageMetadata } from "@/lib/seo";
 import { siteSettings } from "@/lib/site-config";
 
@@ -19,16 +19,12 @@ export default function LegalPage() {
             {siteSettings.legal.legalPageTitle}
           </h1>
           <p className="body-copy max-w-2xl">{siteSettings.legal.legalStatusLine}</p>
-          <TrackedLink
-            href={siteSettings.ctaHref}
-            target="_blank"
-            rel="noreferrer"
-            eventName="cta_click"
-            eventParams={{ location: "legal", target: "telegram" }}
-            className="button-primary text-sm font-medium"
-          >
-            {siteSettings.ctaLabel}
-          </TrackedLink>
+          <CtaRouter
+            analyticsSurface="generic"
+            variant="compact"
+            stackOnMobile
+            routes={["generic"]}
+          />
         </div>
       </section>
 

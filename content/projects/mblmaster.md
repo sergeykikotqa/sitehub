@@ -12,7 +12,7 @@ services:
 featured: true
 order: 1
 publishedAt: "2026-04-03"
-coverImage: "/uploads/mblmaster-lead.png"
+coverImage: "/uploads/mblmaster-lead.webp"
 coverAlt: "Первый экран сайта MBLMaster в Иркутске"
 seoTitle: "MBLMaster — кейс мебельного сайта под Иркутск"
 seoDescription: "Реальный кейс MBLMaster: сайт под мебель на заказ в Иркутске с категориями, видеообзорами, кейсами, отзывами и локальным SEO."

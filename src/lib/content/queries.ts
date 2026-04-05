@@ -1,6 +1,7 @@
 import { cache } from "react";
 
 import { loadProjects } from "@/lib/content/loaders";
+import { siteSettings } from "@/lib/site-config";
 import type { Project } from "@/types/content";
 
 function isPublishedProject(project: Project) {
@@ -35,9 +36,19 @@ export const getAllProjects = cache(async (): Promise<Project[]> => {
   return projects.filter(isPublishedProject).sort(compareProjects);
 });
 
-export const getFeaturedProjects = cache(async (): Promise<Project[]> => {
+export const getFlagshipProjects = cache(async (): Promise<[Project, Project]> => {
   const projects = await getAllProjects();
-  return projects.filter((project) => project.featured);
+  const projectMap = new Map(projects.map((project) => [project.slug, project]));
+  const flagshipProjects = siteSettings.flagshipCaseSlugs.map((slug) => projectMap.get(slug));
+
+  if (flagshipProjects.some((project) => !project)) {
+    const missingSlugs = siteSettings.flagshipCaseSlugs.filter((slug) => !projectMap.has(slug));
+    throw new Error(
+      `Invalid flagshipCaseSlugs in content/settings/site.json. Missing published cases: ${missingSlugs.join(", ")}`,
+    );
+  }
+
+  return flagshipProjects as [Project, Project];
 });
 
 export const getProjectBySlug = cache(async (slug: string): Promise<Project | null> => {

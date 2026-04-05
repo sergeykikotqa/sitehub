@@ -1,3 +1,4 @@
+import { CtaRouter } from "@/components/shared/cta-section";
 import { TrackedLink } from "@/components/shared/tracked-link";
 import { Container } from "@/components/shared/container";
 import { siteSettings } from "@/lib/site-config";
@@ -19,23 +20,18 @@ export function SiteFooter() {
               <TrackedLink
                 href="/legal"
                 eventName="legal_link_open"
-                eventParams={{ location: "footer" }}
+                eventParams={{ surface: "generic" }}
                 className="inline-flex text-sm leading-6 text-muted-foreground transition-colors duration-200 hover:text-foreground"
               >
                 {siteSettings.legal.legalLinkLabel}
               </TrackedLink>
             </div>
           </div>
-          <TrackedLink
-            href={siteSettings.ctaHref}
-            target="_blank"
-            rel="noreferrer"
-            eventName="cta_click"
-            eventParams={{ location: "footer", target: "telegram" }}
-            className="button-secondary text-sm font-medium"
-          >
-            {siteSettings.ctaLabel}
-          </TrackedLink>
+          <CtaRouter
+            analyticsSurface="generic"
+            variant="compact"
+            routes={["generic"]}
+          />
         </div>
       </Container>
     </footer>

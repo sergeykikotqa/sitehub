@@ -1,5 +1,5 @@
+import { CtaRouter } from "@/components/shared/cta-section";
 import { TrackedLink } from "@/components/shared/tracked-link";
-import { siteSettings } from "@/lib/site-config";
 
 export function NotFoundView() {
   return (
@@ -11,25 +11,21 @@ export function NotFoundView() {
           Похоже, здесь нет опубликованного кейса или маршрута. Вернитесь в портфолио и
           откройте рабочую страницу.
         </p>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <TrackedLink
             href="/portfolio"
             eventName="not_found_return"
-            eventParams={{ location: "404" }}
-            className="button-inverse text-sm font-medium"
+            eventParams={{ surface: "generic" }}
+            className="button-inverse w-full justify-center text-sm font-medium sm:w-auto"
           >
             Назад в портфолио
           </TrackedLink>
-          <TrackedLink
-            href={siteSettings.ctaHref}
-            target="_blank"
-            rel="noreferrer"
-            eventName="cta_click"
-            eventParams={{ location: "404", target: "telegram" }}
-            className="button-secondary text-sm font-medium"
-          >
-            {siteSettings.ctaLabel}
-          </TrackedLink>
+          <CtaRouter
+            analyticsSurface="generic"
+            variant="compact"
+            stackOnMobile
+            routes={["generic"]}
+          />
         </div>
       </div>
     </div>

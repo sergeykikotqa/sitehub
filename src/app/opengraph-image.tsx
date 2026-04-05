@@ -1,4 +1,5 @@
 import { createOgImage, size } from "@/lib/og";
+import { siteSettings } from "@/lib/site-config";
 
 export const contentType = "image/png";
 export { size };
@@ -6,7 +7,7 @@ export { size };
 export default async function Image() {
   return createOgImage({
     eyebrow: "Подход студии",
-    title: "MBLMaster и MESTO",
+    title: siteSettings.portfolio.title,
     description:
       "Два реальных кейса в мебельной нише: системный коммерческий сайт и короткий лендинг с proof-блоками и одним CTA.",
     accent: "#b88458",
@@ -21,6 +22,6 @@ export default async function Image() {
       },
     ],
     footerLeft: "СайтХаб",
-    footerRight: "MBLMaster и MESTO",
+    footerRight: siteSettings.portfolio.title,
   });
 }

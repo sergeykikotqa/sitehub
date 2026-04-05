@@ -3,7 +3,7 @@ export interface NavigationItem {
   href: string;
 }
 
-export type CtaRouteKey = "system" | "editorial";
+export type CtaRouteKey = "system" | "editorial" | "generic";
 
 export interface CtaRouteContent {
   label: string;
@@ -40,14 +40,13 @@ export interface LegalContent {
 export interface SiteSettings {
   brandName: string;
   siteUrl: string;
-  telegramUrl: string;
   locationLabel: string;
   defaultTitle: string;
   defaultDescription: string;
   defaultOgImage: string;
-  ctaLabel: string;
   ctaHref: string;
   ctaRoutes: Record<CtaRouteKey, CtaRouteContent>;
+  flagshipCaseSlugs: [string, string];
   navigation: NavigationItem[];
   hero: HeroContent;
   portfolio: PortfolioContent;

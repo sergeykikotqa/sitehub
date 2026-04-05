@@ -12,12 +12,8 @@ type PageShellProps = {
 export function PageShell({ children }: PageShellProps) {
   return (
     <div className="relative flex min-h-screen flex-col">
-      <SiteHeader
-        navigationItems={siteSettings.navigation}
-        ctaHref={siteSettings.ctaHref}
-        ctaLabel={siteSettings.ctaLabel}
-      />
-      <main className="flex-1">
+      <SiteHeader navigationItems={siteSettings.navigation} />
+      <main id="main-content" tabIndex={-1} className="flex-1">
         <Container>{children}</Container>
       </main>
       <SiteFooter />

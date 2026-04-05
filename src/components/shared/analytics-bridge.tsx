@@ -3,7 +3,11 @@
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-import { sendAnalyticsEvent, trackPageView } from "@/lib/analytics";
+import {
+  parseAnalyticsParams,
+  sendAnalyticsEvent,
+  trackPageView,
+} from "@/lib/analytics";
 
 const SCROLL_THRESHOLDS = [50, 90];
 
@@ -48,6 +52,50 @@ export function AnalyticsBridge() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, [pathname]);
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+
+      const target = event.target;
+
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const link = target.closest<HTMLAnchorElement>("a[data-analytics-event]");
+
+      if (!link) {
+        return;
+      }
+
+      const eventName = link.dataset.analyticsEvent;
+
+      if (!eventName) {
+        return;
+      }
+
+      sendAnalyticsEvent(
+        eventName,
+        parseAnalyticsParams(link.dataset.analyticsPayload),
+      );
+    };
+
+    document.addEventListener("click", handleClick, { capture: true });
+
+    return () => {
+      document.removeEventListener("click", handleClick, { capture: true });
+    };
+  }, []);
 
   return null;
 }

@@ -5,8 +5,8 @@ function buildListItems(projects: Project[]) {
   return projects.map((project, index) => ({
     "@type": "ListItem",
     position: index + 1,
-    url: toAbsoluteSiteUrl(`/portfolio/${project.slug}`),
     name: project.title,
+    item: toAbsoluteSiteUrl(`/portfolio/${project.slug}`),
   }));
 }
 
@@ -27,24 +27,26 @@ export function buildHomeJsonLd(projects: Project[]) {
         "@id": toAbsoluteSiteUrl("/#organization"),
         name: siteSettings.brandName,
         url: toAbsoluteSiteUrl("/"),
-        logo: toAbsoluteSiteUrl("/opengraph-image"),
+        logo: toAbsoluteSiteUrl(siteSettings.defaultOgImage),
       },
       {
         "@type": "WebPage",
         "@id": toAbsoluteSiteUrl("/#webpage"),
         url: toAbsoluteSiteUrl("/"),
-        name: `MBLMaster и MESTO — ${siteSettings.brandName}`,
+        name: `${siteSettings.portfolio.title} — ${siteSettings.brandName}`,
         description:
-          "Два реальных мебельных кейса: MBLMaster как коммерческий сайт под Иркутск и MESTO как эмоциональный лендинг с одним Telegram CTA.",
+          "СайтХаб показывает два флагманских сценария для одной ниши: системный коммерческий сайт и короткий лендинг с proof-сценами.",
         isPartOf: {
           "@id": toAbsoluteSiteUrl("/#website"),
         },
-        about: buildListItems(projects),
+        mainEntity: {
+          "@id": toAbsoluteSiteUrl("/#cases"),
+        },
       },
       {
         "@type": "ItemList",
         "@id": toAbsoluteSiteUrl("/#cases"),
-        name: "Реальные кейсы в мебельной нише",
+        name: "Флагманские кейсы СайтХаб",
         itemListElement: buildListItems(projects),
       },
     ],
@@ -59,7 +61,7 @@ export function buildPortfolioJsonLd(projects: Project[]) {
         "@type": "CollectionPage",
         "@id": toAbsoluteSiteUrl("/portfolio#collection"),
         url: toAbsoluteSiteUrl("/portfolio"),
-        name: "MBLMaster и MESTO",
+        name: siteSettings.portfolio.title,
         description: siteSettings.portfolio.description,
         isPartOf: {
           "@id": toAbsoluteSiteUrl("/#website"),
@@ -89,7 +91,7 @@ export function buildPortfolioJsonLd(projects: Project[]) {
       {
         "@type": "ItemList",
         "@id": toAbsoluteSiteUrl("/portfolio#itemlist"),
-        name: "Кейсы MBLMaster и MESTO",
+        name: `Кейсы ${siteSettings.portfolio.title}`,
         itemListElement: buildListItems(projects),
       },
     ],
