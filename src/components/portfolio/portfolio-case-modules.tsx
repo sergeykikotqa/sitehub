@@ -1,7 +1,11 @@
 import { CaseVisualFrame } from "@/components/portfolio/case-visual-frame";
 import { RouteContactLink } from "@/components/shared/cta-section";
 import { TrackedLink } from "@/components/shared/tracked-link";
-import type { CasePresentationConfig } from "@/lib/case-presentation";
+import {
+  getFrame,
+  PROOF_FRAME_ORDER,
+  type CasePresentationConfig,
+} from "@/lib/case-presentation";
 import { cn } from "@/lib/utils";
 import type { Project } from "@/types/content";
 
@@ -65,6 +69,10 @@ export function PortfolioSystemModule({
   presentation,
   priority = false,
 }: PortfolioCaseModuleProps) {
+  const [understandAsset, trustAsset, actAsset] = PROOF_FRAME_ORDER.map((key) =>
+    getFrame(presentation.visualAssets.proofFrames, key),
+  );
+
   return (
     <article className="surface-card px-6 py-6 md:px-8 md:py-8">
       <div className="space-y-6">
@@ -97,7 +105,7 @@ export function PortfolioSystemModule({
 
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1.02fr)_minmax(19rem,0.98fr)]">
           <CaseVisualFrame
-            asset={presentation.visualAssets.portfolio}
+            asset={understandAsset}
             loadPriority={priority ? "high" : "auto"}
           />
           <div className="space-y-4">
@@ -116,6 +124,11 @@ export function PortfolioSystemModule({
               ))}
             </div>
           </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <CaseVisualFrame asset={trustAsset} />
+          <CaseVisualFrame asset={actAsset} />
         </div>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
@@ -149,8 +162,9 @@ export function PortfolioEditorialModule({
   presentation,
   priority = false,
 }: PortfolioCaseModuleProps) {
-  const [proofCardAsset, proofFlowAsset, heroTypeAsset] =
-    presentation.visualAssets.gallery;
+  const [understandAsset, trustAsset, actAsset] = PROOF_FRAME_ORDER.map((key) =>
+    getFrame(presentation.visualAssets.proofFrames, key),
+  );
 
   return (
     <article className="surface-inverse px-6 py-6 md:px-8 md:py-8">
@@ -177,16 +191,13 @@ export function PortfolioEditorialModule({
 
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1.08fr)_minmax(18rem,0.92fr)]">
           <CaseVisualFrame
-            asset={presentation.visualAssets.portfolio}
+            asset={understandAsset}
             loadPriority={priority ? "high" : "auto"}
             tone="dark"
           />
-          <div className="grid gap-4 md:grid-cols-[minmax(0,0.84fr)_minmax(15rem,1.16fr)]">
-            <CaseVisualFrame asset={proofCardAsset} tone="dark" />
-            <div className="grid gap-4">
-              <CaseVisualFrame asset={proofFlowAsset} tone="dark" />
-              <CaseVisualFrame asset={heroTypeAsset} tone="dark" />
-            </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <CaseVisualFrame asset={trustAsset} tone="dark" />
+            <CaseVisualFrame asset={actAsset} tone="dark" />
           </div>
         </div>
 

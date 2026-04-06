@@ -5,6 +5,11 @@ This document defines non-negotiable motion rules for the product.
 Any UI change that introduces or modifies animation must follow these rules.
 If a proposed change conflicts with this document, the document takes priority.
 
+Implementation architecture for hero and motion work lives here:
+→ /docs/premium-showcase-architecture.md
+
+This document remains the source of truth for motion tone and restraint.
+
 ## Core principle
 
 Animation must never slow down understanding of the page.

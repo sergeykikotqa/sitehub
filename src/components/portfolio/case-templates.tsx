@@ -7,7 +7,10 @@ import {
 } from "@/components/shared/cta-section";
 import { MarkdownContent } from "@/components/shared/markdown-content";
 import { TrackedLink } from "@/components/shared/tracked-link";
-import type { CasePresentationConfig } from "@/lib/case-presentation";
+import {
+  getFrame,
+  type CasePresentationConfig,
+} from "@/lib/case-presentation";
 import { cn } from "@/lib/utils";
 import type { Project } from "@/types/content";
 
@@ -134,7 +137,12 @@ export function SystemCaseTemplate({
   project,
   presentation,
 }: CaseTemplateProps) {
-  const [categoryAsset, videoAsset, trustAsset] = presentation.visualAssets.gallery;
+  const understandAsset = getFrame(
+    presentation.visualAssets.proofFrames,
+    "understand",
+  );
+  const trustAsset = getFrame(presentation.visualAssets.proofFrames, "trust");
+  const actAsset = getFrame(presentation.visualAssets.proofFrames, "act");
 
   return (
     <div className="space-y-16 py-12 md:space-y-20 md:py-16">
@@ -169,7 +177,7 @@ export function SystemCaseTemplate({
         </div>
 
         <CaseVisualFrame
-          asset={presentation.visualAssets.lead}
+          asset={understandAsset}
           loadPriority="high"
         />
       </section>
@@ -196,12 +204,12 @@ export function SystemCaseTemplate({
           </p>
         </div>
 
-        <div className="grid gap-4 xl:grid-cols-[minmax(0,1.04fr)_minmax(19rem,0.96fr)]">
-          <CaseVisualFrame asset={categoryAsset} />
-          <div className="grid gap-4">
-            <CaseVisualFrame asset={videoAsset} />
-            <CaseVisualFrame asset={trustAsset} />
-          </div>
+        <div className="grid gap-4 xl:grid-cols-[minmax(0,0.94fr)_minmax(20rem,1.06fr)] xl:items-start">
+          <NarrativePanel
+            title="Почему этому верят"
+            content="Здесь доверие строится на реальных обзорах и примерах, а не на абстрактных обещаниях."
+          />
+          <CaseVisualFrame asset={trustAsset} />
         </div>
       </section>
 
@@ -220,29 +228,34 @@ export function SystemCaseTemplate({
       <NarrativePanel title="Что даёт такой формат" content={project.result} />
 
       <section className="rounded-[34px] border border-border bg-[linear-gradient(180deg,rgba(255,252,247,0.92),rgba(255,249,243,0.86))] px-6 py-6 shadow-[0_18px_52px_rgba(28,24,20,0.08)] md:px-8 md:py-8">
-        <div className="max-w-3xl space-y-3">
-          <p className="section-kicker">Следующий шаг</p>
-          <h2 className="section-title max-w-[13ch] text-balance">
-            {presentation.detail.closingTitle}
-          </h2>
-          <p className="body-copy">{presentation.detail.closingDescription}</p>
-        </div>
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <RouteContactLink
-            route="system"
-            analyticsSurface="detail"
-            className="button-primary w-full justify-center text-sm font-medium sm:w-auto"
-          >
-            {presentation.detail.primaryCta}
-          </RouteContactLink>
-          <RouteContactLink
-            route="editorial"
-            analyticsSurface="detail"
-            tier="secondary"
-            className="button-secondary w-full justify-center text-sm font-medium sm:w-auto"
-          >
-            {presentation.detail.secondaryCta}
-          </RouteContactLink>
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,0.96fr)_minmax(18rem,0.84fr)] xl:items-start">
+          <div>
+            <div className="max-w-3xl space-y-3">
+              <p className="section-kicker">Следующий шаг</p>
+              <h2 className="section-title max-w-[13ch] text-balance">
+                {presentation.detail.closingTitle}
+              </h2>
+              <p className="body-copy">{presentation.detail.closingDescription}</p>
+            </div>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <RouteContactLink
+                route="system"
+                analyticsSurface="detail"
+                className="button-primary w-full justify-center text-sm font-medium sm:w-auto"
+              >
+                {presentation.detail.primaryCta}
+              </RouteContactLink>
+              <RouteContactLink
+                route="editorial"
+                analyticsSurface="detail"
+                tier="secondary"
+                className="button-secondary w-full justify-center text-sm font-medium sm:w-auto"
+              >
+                {presentation.detail.secondaryCta}
+              </RouteContactLink>
+            </div>
+          </div>
+          <CaseVisualFrame asset={actAsset} />
         </div>
       </section>
     </div>
@@ -253,8 +266,12 @@ export function EditorialCaseTemplate({
   project,
   presentation,
 }: CaseTemplateProps) {
-  const [proofCardAsset, proofFlowAsset, heroTypeAsset] =
-    presentation.visualAssets.gallery;
+  const understandAsset = getFrame(
+    presentation.visualAssets.proofFrames,
+    "understand",
+  );
+  const trustAsset = getFrame(presentation.visualAssets.proofFrames, "trust");
+  const actAsset = getFrame(presentation.visualAssets.proofFrames, "act");
 
   return (
     <div className="space-y-10 py-8 md:space-y-16 md:py-14">
@@ -291,7 +308,7 @@ export function EditorialCaseTemplate({
             </div>
 
             <CaseVisualFrame
-              asset={presentation.visualAssets.lead}
+              asset={understandAsset}
               loadPriority="high"
               tone="dark"
             />
@@ -302,13 +319,7 @@ export function EditorialCaseTemplate({
       <section className="space-y-6">
         <div className="grid gap-3 sm:gap-4 xl:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
           <NarrativePanel title="Что срабатывает" content={presentation.detail.editorialProof} />
-          <div className="grid gap-3 sm:gap-4 md:grid-cols-[minmax(0,0.84fr)_minmax(15rem,1.16fr)]">
-            <CaseVisualFrame asset={proofCardAsset} />
-            <div className="grid gap-3 sm:gap-4">
-              <CaseVisualFrame asset={proofFlowAsset} />
-              <CaseVisualFrame asset={heroTypeAsset} className="hidden sm:block" />
-            </div>
-          </div>
+          <CaseVisualFrame asset={trustAsset} />
         </div>
 
         <div className="grid gap-3 sm:gap-4 xl:grid-cols-[minmax(0,0.92fr)_minmax(20rem,1.08fr)]">
@@ -316,29 +327,32 @@ export function EditorialCaseTemplate({
             title="Почему это работает быстро"
             content={presentation.detail.editorialWhyItWorks}
           />
-          <section className="rounded-[30px] border border-[rgba(158,90,51,0.16)] bg-[rgba(255,248,240,0.82)] p-5 sm:p-6 md:p-7">
-            <p className="section-kicker">Следующий шаг</p>
-            <p className="mt-3 text-[0.98rem] leading-7 text-foreground/78">
-              CTA появляется рано, пока импульс ещё не успел остыть.
-            </p>
-            <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <RouteContactLink
-                route="editorial"
-                analyticsSurface="detail"
-                className="button-primary w-full justify-center text-sm font-medium sm:w-auto"
-              >
-                {presentation.detail.primaryCta}
-              </RouteContactLink>
-              <RouteContactLink
-                route="system"
-                analyticsSurface="detail"
-                tier="secondary"
-                className="button-secondary w-full justify-center text-sm font-medium sm:w-auto"
-              >
-                {presentation.detail.secondaryCta}
-              </RouteContactLink>
-            </div>
-          </section>
+          <div className="grid gap-3 sm:gap-4">
+            <CaseVisualFrame asset={actAsset} />
+            <section className="rounded-[30px] border border-[rgba(158,90,51,0.16)] bg-[rgba(255,248,240,0.82)] p-5 sm:p-6 md:p-7">
+              <p className="section-kicker">Следующий шаг</p>
+              <p className="mt-3 text-[0.98rem] leading-7 text-foreground/78">
+                CTA появляется рано, пока импульс ещё не успел остыть.
+              </p>
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <RouteContactLink
+                  route="editorial"
+                  analyticsSurface="detail"
+                  className="button-primary w-full justify-center text-sm font-medium sm:w-auto"
+                >
+                  {presentation.detail.primaryCta}
+                </RouteContactLink>
+                <RouteContactLink
+                  route="system"
+                  analyticsSurface="detail"
+                  tier="secondary"
+                  className="button-secondary w-full justify-center text-sm font-medium sm:w-auto"
+                >
+                  {presentation.detail.secondaryCta}
+                </RouteContactLink>
+              </div>
+            </section>
+          </div>
         </div>
       </section>
 

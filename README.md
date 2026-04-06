@@ -72,6 +72,11 @@ npm run build
 All motion and animation decisions must follow the rules defined here:
 → /docs/motion-guidelines.md
 
+## Premium Showcase Architecture
+
+Repo-level architecture rules for premium showcase sites and future hero/motion work:
+→ /docs/premium-showcase-architecture.md
+
 ## Decision Tuning Framework
 
 Post-launch product decisions must follow the benchmark and guardrail rules defined here:

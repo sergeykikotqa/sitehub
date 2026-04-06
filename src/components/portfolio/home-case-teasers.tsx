@@ -1,7 +1,11 @@
 import { CaseVisualFrame } from "@/components/portfolio/case-visual-frame";
 import { RouteContactLink } from "@/components/shared/cta-section";
 import { TrackedLink } from "@/components/shared/tracked-link";
-import type { CasePresentationConfig } from "@/lib/case-presentation";
+import {
+  getFrame,
+  PROOF_FRAME_ORDER,
+  type CasePresentationConfig,
+} from "@/lib/case-presentation";
 import { cn } from "@/lib/utils";
 import type { Project } from "@/types/content";
 
@@ -63,7 +67,9 @@ export function HomeSystemTeaser({
   project,
   presentation,
 }: HomeCaseTeaserProps) {
-  const [categoryAsset, videoAsset, trustAsset] = presentation.visualAssets.gallery;
+  const [understandAsset, trustAsset, actAsset] = PROOF_FRAME_ORDER.map((key) =>
+    getFrame(presentation.visualAssets.proofFrames, key),
+  );
 
   return (
     <section className="surface-card px-6 py-6 md:px-8 md:py-8">
@@ -86,13 +92,6 @@ export function HomeSystemTeaser({
                 <p className="section-kicker">Почему это работает</p>
                 <StackedCopy text={presentation.home.systemWhyItWorks ?? ""} />
               </div>
-            </div>
-          </div>
-
-          <div className="rounded-[28px] border border-[rgba(158,90,51,0.16)] bg-[rgba(255,248,240,0.82)] p-5">
-            <p className="section-kicker">Доказательство на кейсе</p>
-            <div className="mt-3">
-              <StackedCopy text={presentation.home.systemProofLead ?? ""} />
             </div>
           </div>
 
@@ -122,13 +121,10 @@ export function HomeSystemTeaser({
         </div>
 
         <div className="space-y-4">
-          <CaseVisualFrame asset={presentation.visualAssets.home} />
-          <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_minmax(16rem,0.88fr)]">
-            <CaseVisualFrame asset={categoryAsset} />
-            <div className="grid gap-4">
-              <CaseVisualFrame asset={videoAsset} />
-              <CaseVisualFrame asset={trustAsset} />
-            </div>
+          <CaseVisualFrame asset={understandAsset} />
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(15rem,0.75fr)] lg:items-start">
+            <CaseVisualFrame asset={trustAsset} />
+            <CaseVisualFrame asset={actAsset} />
           </div>
         </div>
       </div>
@@ -140,8 +136,9 @@ export function HomeEditorialTeaser({
   project,
   presentation,
 }: HomeCaseTeaserProps) {
-  const [proofCardAsset, proofFlowAsset, heroTypeAsset] =
-    presentation.visualAssets.gallery;
+  const [understandAsset, trustAsset, actAsset] = PROOF_FRAME_ORDER.map((key) =>
+    getFrame(presentation.visualAssets.proofFrames, key),
+  );
 
   return (
     <section className="surface-inverse px-6 py-6 md:px-8 md:py-8">
@@ -167,20 +164,10 @@ export function HomeEditorialTeaser({
         </div>
 
         <div className="grid gap-4 xl:grid-cols-[minmax(0,1.08fr)_minmax(18rem,0.92fr)]">
-          <CaseVisualFrame asset={presentation.visualAssets.home} tone="dark" />
-          <div className="grid gap-4 md:grid-cols-[minmax(0,0.84fr)_minmax(15rem,1.16fr)]">
-            <CaseVisualFrame asset={proofCardAsset} tone="dark" />
-            <div className="grid gap-4">
-              <CaseVisualFrame asset={proofFlowAsset} tone="dark" />
-              <CaseVisualFrame asset={heroTypeAsset} tone="dark" />
-            </div>
-          </div>
-        </div>
-
-        <div className="rounded-[28px] border border-white/10 bg-white/[0.05] p-5">
-          <p className="section-kicker text-white/62">Почему это работает</p>
-          <div className="mt-3">
-            <StackedCopy text={presentation.home.editorialInterpretation ?? ""} dark />
+          <CaseVisualFrame asset={understandAsset} tone="dark" />
+          <div className="grid gap-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(15rem,0.75fr)] lg:items-start">
+            <CaseVisualFrame asset={trustAsset} tone="dark" />
+            <CaseVisualFrame asset={actAsset} tone="dark" />
           </div>
         </div>
 
