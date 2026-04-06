@@ -3,6 +3,7 @@ import { siteSettings } from "@/lib/site-config";
 
 export const contentType = "image/png";
 export { size };
+export const dynamic = "force-static";
 
 export default async function Image() {
   return createOgImage({

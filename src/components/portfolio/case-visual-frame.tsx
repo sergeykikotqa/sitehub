@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import type { CaseVisualAsset } from "@/lib/case-presentation";
+import { withBasePath } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 type CaseVisualFrameProps = {
@@ -39,7 +40,7 @@ export function CaseVisualFrame({
         )}
       >
         <Image
-          src={asset.src}
+          src={withBasePath(asset.src)}
           alt={asset.alt}
           fill
           fetchPriority={loadPriority === "high" ? "high" : undefined}

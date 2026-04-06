@@ -34,9 +34,43 @@ function trimTrailingSlash(value: string) {
   return value.endsWith("/") ? value.slice(0, -1) : value;
 }
 
-export function toAbsoluteSiteUrl(path: string) {
+function normalizeBasePath(value: string | undefined) {
+  const trimmed = value?.trim();
+
+  if (!trimmed || trimmed === "/") {
+    return "";
+  }
+
+  const withLeadingSlash = trimmed.startsWith("/") ? trimmed : `/${trimmed}`;
+  return withLeadingSlash.endsWith("/")
+    ? withLeadingSlash.slice(0, -1)
+    : withLeadingSlash;
+}
+
+export const siteBasePath = normalizeBasePath(process.env.NEXT_PUBLIC_BASE_PATH);
+
+export function withBasePath(path: string) {
   const normalizedPath = path === "/" ? "/" : path.startsWith("/") ? path : `/${path}`;
-  return new URL(normalizedPath, `${trimTrailingSlash(metadataBaseUrl.toString())}/`).toString();
+
+  if (!siteBasePath) {
+    return normalizedPath;
+  }
+
+  if (
+    normalizedPath === siteBasePath ||
+    normalizedPath.startsWith(`${siteBasePath}/`)
+  ) {
+    return normalizedPath;
+  }
+
+  return normalizedPath === "/" ? `${siteBasePath}/` : `${siteBasePath}${normalizedPath}`;
+}
+
+export function toAbsoluteSiteUrl(path: string) {
+  return new URL(
+    withBasePath(path),
+    `${trimTrailingSlash(metadataBaseUrl.toString())}/`,
+  ).toString();
 }
 
 export function getCtaRoute(route: CtaRouteKey): CtaRouteContent {

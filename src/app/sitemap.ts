@@ -3,6 +3,8 @@ import type { MetadataRoute } from "next";
 import { getAllProjects } from "@/lib/content/queries";
 import { siteSettings, toAbsoluteSiteUrl } from "@/lib/site-config";
 
+export const dynamic = "force-static";
+
 function getSiteLastModified(projects: Awaited<ReturnType<typeof getAllProjects>>) {
   const projectDates = projects.map((project) => new Date(project.publishedAt).getTime());
   const legalDate = siteSettings.legal.legalLastUpdated

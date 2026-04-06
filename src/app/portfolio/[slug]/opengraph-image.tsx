@@ -13,6 +13,7 @@ type ProjectOgImageProps = {
 export const contentType = "image/png";
 export { size };
 export const dynamicParams = false;
+export const dynamic = "force-static";
 
 export async function generateStaticParams() {
   const slugs = await getProjectSlugs();

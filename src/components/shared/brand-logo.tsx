@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { withBasePath } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 type BrandLogoProps = {
@@ -21,7 +22,7 @@ export function BrandLogo({
   return (
     <span className={cn("relative inline-block", sizeClasses[size], className)}>
       <Image
-        src="/brand/sitehub-logo.png"
+        src={withBasePath("/brand/sitehub-logo.png")}
         alt={alt}
         fill
         sizes="(min-width: 1024px) 170px, (min-width: 640px) 150px, 130px"

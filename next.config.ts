@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
 
+const isGithubPagesBuild = process.env.GITHUB_PAGES === "true";
+const githubPagesBasePath = isGithubPagesBuild
+  ? process.env.GITHUB_PAGES_BASE_PATH?.trim() || "/sitehub"
+  : "";
+
 const httpsSiteUrlFromEnv =
   process.env.SITE_URL?.trim() || process.env.NEXT_PUBLIC_SITE_URL?.trim() || "";
 
@@ -34,28 +39,42 @@ const securityHeaders = [
 ] as const;
 
 const nextConfig: NextConfig = {
-  async headers() {
-    return [
-      {
-        source: "/:path*",
-        headers: [...securityHeaders],
-      },
-    ];
-  },
-  async redirects() {
-    return [
-      {
-        source: "/portfolio/kitchen",
-        destination: "/portfolio/mblmaster",
-        permanent: true,
-      },
-      {
-        source: "/portfolio/wardrobe",
-        destination: "/portfolio/criatevmebel",
-        permanent: true,
-      },
-    ];
-  },
+  ...(isGithubPagesBuild
+    ? {
+        output: "export" as const,
+        basePath: githubPagesBasePath,
+        trailingSlash: true,
+        images: {
+          unoptimized: true,
+        },
+        env: {
+          NEXT_PUBLIC_BASE_PATH: githubPagesBasePath,
+        },
+      }
+    : {
+        async headers() {
+          return [
+            {
+              source: "/:path*",
+              headers: [...securityHeaders],
+            },
+          ];
+        },
+        async redirects() {
+          return [
+            {
+              source: "/portfolio/kitchen",
+              destination: "/portfolio/mblmaster",
+              permanent: true,
+            },
+            {
+              source: "/portfolio/wardrobe",
+              destination: "/portfolio/criatevmebel",
+              permanent: true,
+            },
+          ];
+        },
+      }),
 };
 
 export default nextConfig;
